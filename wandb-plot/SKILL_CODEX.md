@@ -2,6 +2,7 @@
 name: wandb-plot
 description: |
   Codex-focused variant for scripted, deterministic CLI usage:
+  - List projects for your entity
   - List runs, list metrics
   - Download existing plot images
   - Generate plots from metric history
@@ -15,6 +16,14 @@ description: |
 - Run from `wandb-plot/` so `scripts/` is on disk.
 
 ## Tools (Scripts)
+
+### `scripts/list_projects.py`
+
+**Inputs**: optional `--entity`, `--limit`, `--json`.
+
+**Outputs**
+- Default: human-readable table to stdout.
+- With `--json`: JSON list of projects, each containing `name`, `entity`, `description`, `created_at`, `url`.
 
 ### `scripts/list_runs.py`
 
@@ -50,6 +59,7 @@ description: |
 ## Commands (Copy/Paste)
 
 ```bash
+python3 scripts/list_projects.py [--entity my-org] [--limit 100] [--json]
 python3 scripts/list_runs.py <entity/project> [--state finished] [--limit 100] [--json]
 python3 scripts/list_metrics.py <entity/project> <run_id> [--include-system] [--json]
 python3 scripts/download_plots.py <entity/project> <run_id> [--pattern "*.png"] [--output <dir>] [--force]

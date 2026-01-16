@@ -56,8 +56,12 @@ def get_api() -> wandb.Api:
         # Try to initialize API - will use WANDB_API_KEY env var or ~/.netrc
         api = wandb.Api()
         # Test the connection by attempting to access viewer info
-        _ = api.viewer
-        logger.debug("W&B API initialized for user: %s", api.viewer.get("username"))
+        viewer = api.viewer
+        if isinstance(viewer, dict):
+            username = viewer.get("username")
+        else:
+            username = getattr(viewer, "username", None)
+        logger.debug("W&B API initialized for user: %s", username)
         return api
     except wandb.errors.UsageError as e:
         if "Could not find" in str(e) or "login" in str(e).lower():
@@ -121,7 +125,11 @@ def parse_entity_project(
     else:
         # Only project provided, use current user's entity
         api = api or get_api()
-        entity = api.viewer.get("entity", api.viewer.get("username"))
+        viewer = api.viewer
+        if isinstance(viewer, dict):
+            entity = viewer.get("entity") or viewer.get("username")
+        else:
+            entity = getattr(viewer, "entity", None) or getattr(viewer, "username", None)
         return entity, entity_project
 
 

@@ -2,6 +2,7 @@
 name: wandb-plot
 description: |
   Download and generate plots from Weights & Biases runs. Use when you need to:
+  - List projects you have access to
   - List runs in a W&B project
   - Inspect available metrics for a run
   - Download existing plot images from a run
@@ -16,6 +17,17 @@ description: |
 - Run commands from `wandb-plot/` (or install the package and run the scripts via your environment).
 
 ## Tools (Scripts)
+
+### `scripts/list_projects.py`
+
+**Inputs**
+- `--entity <entity>` (optional; defaults to current user or org)
+- `--limit <n>` (optional, default: 100)
+- `--json` (optional)
+
+**Output**
+- Stdout table (default) or JSON list (with `--json`), where each item includes:
+  - `name`, `entity`, `description`, `created_at`, `url`
 
 ### `scripts/list_runs.py`
 
@@ -72,6 +84,7 @@ description: |
 ## Workflow
 
 ```bash
+python3 scripts/list_projects.py --limit 10
 python3 scripts/list_runs.py <entity/project> --limit 10
 python3 scripts/list_metrics.py <entity/project> <run_id>
 python3 scripts/download_plots.py <entity/project> <run_id>

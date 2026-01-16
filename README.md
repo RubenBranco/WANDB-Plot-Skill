@@ -6,6 +6,7 @@ Disclaimer: This was 99.9% vibe-coded using Claude Code and Codex.
 
 Download and generate plots from Weights & Biases runs. This repository ships a
 skill and CLI scripts for:
+- Listing projects in an entity
 - Listing runs in a project
 - Discovering available metrics for a run
 - Downloading existing plot images
@@ -68,16 +69,19 @@ export WANDB_API_KEY=your_key_here
 # Run scripts from within the package directory
 cd wandb-plot
 
-# 1. List available runs in a project
+# 1. List projects for your default entity
+python3 scripts/list_projects.py --limit 10
+
+# 2. List available runs in a project
 python3 scripts/list_runs.py my-org/my-project --limit 10
 
-# 2. View available metrics for a specific run
+# 3. View available metrics for a specific run
 python3 scripts/list_metrics.py my-org/my-project run-id-123
 
-# 3. Try downloading existing plots (faster)
+# 4. Try downloading existing plots (faster)
 python3 scripts/download_plots.py my-org/my-project run-id-123
 
-# 4. Generate plots from raw data
+# 5. Generate plots from raw data
 python3 scripts/generate_plots.py my-org/my-project run-id-123 --metrics loss,accuracy
 ```
 

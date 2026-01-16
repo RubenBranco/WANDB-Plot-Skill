@@ -2,6 +2,7 @@
 
 import pytest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import Mock, patch
 import wandb
 
@@ -82,6 +83,17 @@ class TestGetApi:
 
         assert api.viewer["username"] == "test-user"
 
+    @patch('scripts.wandb_utils.wandb.Api')
+    def test_authentication_with_viewer_object(self, mock_api_class):
+        """Test API initialization when viewer is an object."""
+        mock_api_instance = Mock()
+        mock_api_instance.viewer = SimpleNamespace(username="test-user")
+        mock_api_class.return_value = mock_api_instance
+
+        api = get_api()
+
+        assert api.viewer.username == "test-user"
+
 
 class TestParseEntityProject:
     """Tests for parse_entity_project function."""
@@ -119,6 +131,18 @@ class TestParseEntityProject:
         entity, project = parse_entity_project("my-project")
 
         assert entity == "test-user"
+        assert project == "my-project"
+
+    @patch('scripts.wandb_utils.get_api')
+    def test_parse_project_only_with_viewer_object(self, mock_get_api):
+        """Test parsing with viewer object instead of dict."""
+        mock_api = Mock()
+        mock_api.viewer = SimpleNamespace(entity="default-entity", username="test-user")
+        mock_get_api.return_value = mock_api
+
+        entity, project = parse_entity_project("my-project")
+
+        assert entity == "default-entity"
         assert project == "my-project"
 
     def test_parse_empty_string(self):
