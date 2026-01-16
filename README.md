@@ -10,7 +10,7 @@ skill and CLI scripts for:
 - Listing runs in a project
 - Discovering available metrics for a run
 - Downloading existing plot images
-- Generating line plots from raw metric data
+- Generating line plots from raw metric data (including multi-run comparison and EMA smoothing)
 
 The implementation lives in `wandb-plot/`.
 
@@ -83,6 +83,9 @@ python3 scripts/download_plots.py my-org/my-project run-id-123
 
 # 5. Generate plots from raw data
 python3 scripts/generate_plots.py my-org/my-project run-id-123 --metrics loss,accuracy
+
+# 6. Compare runs with W&B-style EMA smoothing (default)
+python3 scripts/generate_plots.py my-org/my-project run-a,run-b --metrics reward/total_mean --ema-weight 0.99 --viewport-scale 1000
 ```
 
 ## Output

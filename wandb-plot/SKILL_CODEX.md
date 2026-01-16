@@ -51,7 +51,7 @@ description: |
 
 ### `scripts/generate_plots.py`
 
-**Inputs**: `<entity/project> <run_id> --metrics <m1,m2>`, optional `--full-res`, `--smooth`, `--output`.
+**Inputs**: `<entity/project> <run_id> --metrics <m1,m2>`, optional `--full-res`, `--smooth`, `--output`, `--ema-weight`, `--viewport-scale`, `--no-ema`.
 
 **Outputs**
 - Writes `<metric>.png` per metric plus `metadata.json` to the output directory.
@@ -63,7 +63,8 @@ python3 scripts/list_projects.py [--entity my-org] [--limit 100] [--json]
 python3 scripts/list_runs.py <entity/project> [--state finished] [--limit 100] [--json]
 python3 scripts/list_metrics.py <entity/project> <run_id> [--include-system] [--json]
 python3 scripts/download_plots.py <entity/project> <run_id> [--pattern "*.png"] [--output <dir>] [--force]
-python3 scripts/generate_plots.py <entity/project> <run_id> --metrics <m1,m2> [--full-res] [--smooth N] [--output <dir>]
+python3 scripts/generate_plots.py <entity/project> <run_id> --metrics <m1,m2> [--full-res] [--smooth N] [--output <dir>] [--ema-weight 0.99] [--viewport-scale 1000] [--no-ema]
+python3 scripts/generate_plots.py <entity/project> run1,run2 --metrics <m1> [--ema-weight 0.99] [--viewport-scale 1000]
 ```
 
 ## Notes

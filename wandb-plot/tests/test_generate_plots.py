@@ -92,6 +92,43 @@ class TestGeneratePlots:
         assert Path(generated[0]).exists()
 
     @patch("scripts.generate_plots.get_run")
+    def test_generate_with_multiple_runs(self, mock_get_run, sample_history_df, tmp_path):
+        """Test generating plots across multiple runs."""
+        run_a = Mock()
+        run_a.id = "run-aaa"
+        run_a.name = "test-run-a"
+        run_a.entity = "test-entity"
+        run_a.project = "test-project"
+        run_a.history.return_value = sample_history_df
+
+        run_b = Mock()
+        run_b.id = "run-bbb"
+        run_b.name = "test-run-b"
+        run_b.entity = "test-entity"
+        run_b.project = "test-project"
+        run_b.history.return_value = sample_history_df
+
+        mock_get_run.side_effect = [run_a, run_b]
+
+        output_dir = tmp_path / "out"
+
+        generated = generate_plots(
+            "test-entity/test-project",
+            "run-aaa,run-bbb",
+            ["train/loss"],
+            output_dir=str(output_dir)
+        )
+
+        assert len(generated) == 1
+        assert Path(generated[0]).exists()
+        assert (output_dir / "metadata.json").exists()
+
+        with open(output_dir / "metadata.json", "r") as f:
+            metadata = json.load(f)
+
+        assert metadata["run_ids"] == ["run-aaa", "run-bbb"]
+
+    @patch("scripts.generate_plots.get_run")
     def test_missing_metrics_raises(self, mock_get_run, sample_history_df):
         """Test error when requested metrics are missing."""
         run = Mock()
