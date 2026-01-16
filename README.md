@@ -20,12 +20,34 @@ The implementation lives in `wandb-plot/`.
 
 This repo is a Claude Code plugin (manifest at `.claude-plugin/plugin.json`) and uses the shared skill file at `wandb-plot/SKILL.md`.
 
-- Install from this repo (no publish required):
-  - `git clone <repo-url> && cc --plugin-dir /path/to/WANDB-Plot-Skill`
-- Marketplace install:
-  - Run `/plugin install wandb-plot` inside Claude Code (marketplace installs don’t take arbitrary repo URLs).
-- Runtime deps:
-  - Install Python deps from `wandb-plot/` (see “Python Package” below).
+#### Option 1: Install from Marketplace (Recommended)
+
+The easiest way to install this plugin is through the marketplace:
+
+1. **Add the marketplace** (one-time setup):
+   ```
+   /plugin marketplace add RubenBranco/WANDB-Plot-Skill
+   ```
+
+2. **Install the plugin**:
+   ```
+   /plugin install wandb-plot
+   ```
+
+That's it! The plugin will be automatically installed and ready to use.
+
+#### Option 2: Install from Source
+
+If you want to install directly from this repository:
+
+```bash
+git clone https://github.com/RubenBranco/WANDB-Plot-Skill.git
+cc --plugin-dir /path/to/WANDB-Plot-Skill
+```
+
+#### Runtime Dependencies
+
+After installing the plugin (either method), you'll need to install Python dependencies from `wandb-plot/` (see "Python Package" section below).
 
 ### Codex (Skill)
 

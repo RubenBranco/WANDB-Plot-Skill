@@ -1,0 +1,22 @@
+{
+  "name": "wandb-plot-marketplace",
+  "owner": {
+    "name": "WANDB-Plot-Skill"
+  },
+  "metadata": {
+    "description": "W&B plotting and analysis tools for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "wandb-plot",
+      "source": ".",
+      "description": "Download and generate plots from Weights & Biases runs (skill + CLI scripts)",
+      "version": "0.1.0",
+      "author": {
+        "name": "WANDB-Plot-Skill"
+      },
+      "keywords": ["wandb", "plots", "visualization", "machine-learning", "experiments"],
+      "category": "data-analysis"
+    }
+  ]
+}

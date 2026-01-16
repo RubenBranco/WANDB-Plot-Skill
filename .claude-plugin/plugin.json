@@ -1,5 +1,6 @@
 {
   "name": "wandb-plot",
+  "version": "0.1.0",
   "description": "Download and generate plots from Weights & Biases runs (skill + CLI scripts)",
   "author": {
     "name": "WANDB-Plot-Skill"
