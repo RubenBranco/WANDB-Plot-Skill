@@ -9,12 +9,14 @@ description: |
   - Generate line plots from metric history (loss, accuracy, etc.)
 ---
 
-# W&B Plot Skill (Claude)
+# W&B Plot Skill
 
 ## Prereqs
 
 - Auth: set `WANDB_API_KEY` (recommended) or run `wandb login`.
-- Run commands from `wandb-plot/` (or install the package and run the scripts via your environment).
+- Working directory:
+  - Claude plugin: `cd "${CLAUDE_PLUGIN_ROOT}/wandb-plot"`
+  - Codex or local repo: `cd wandb-plot`
 
 ## Tools (Scripts)
 

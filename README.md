@@ -18,7 +18,7 @@ The implementation lives in `wandb-plot/`.
 
 ### Claude Code (Plugin)
 
-This repo is a Claude Code plugin (manifest at `.claude-plugin/plugin.json`) and includes a plugin skill at `skills/wandb-plot/SKILL.md`.
+This repo is a Claude Code plugin (manifest at `.claude-plugin/plugin.json`) and uses the shared skill file at `wandb-plot/SKILL.md`.
 
 - Install from this repo (no publish required):
   - `git clone <repo-url> && cc --plugin-dir /path/to/WANDB-Plot-Skill`
@@ -125,5 +125,4 @@ pytest tests/ -v -m integration
 
 ## Skills
 
-- Claude plugin skill: `skills/wandb-plot/SKILL.md`
-- Codex skill: `wandb-plot/SKILL.md` (and `wandb-plot/SKILL_CODEX.md`)
+- Shared skill for Claude Code + Codex: `wandb-plot/SKILL.md`
