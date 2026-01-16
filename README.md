@@ -86,6 +86,12 @@ python3 scripts/generate_plots.py my-org/my-project run-id-123 --metrics loss,ac
 
 # 6. Compare runs with W&B-style EMA smoothing (default)
 python3 scripts/generate_plots.py my-org/my-project run-a,run-b --metrics reward/total_mean --ema-weight 0.99 --viewport-scale 1000
+
+# 7. Group outputs by metric prefix
+python3 scripts/generate_plots.py my-org/my-project run-a,run-b --metrics rewards/total_mean,rewards/total_std --output /path/to/folder --group-by-prefix
+
+# 8. Plot all metrics (excludes system metrics unless --include-system is set)
+python3 scripts/generate_plots.py my-org/my-project run-a,run-b --all-metrics --output /path/to/folder --group-by-prefix
 ```
 
 ## Output

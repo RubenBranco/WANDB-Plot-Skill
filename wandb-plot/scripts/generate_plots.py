@@ -167,7 +167,7 @@ def plot_metric(
     # Labels and title
     plt.xlabel(x_label, fontsize=12)
     plt.ylabel(metric, fontsize=12)
-    plt.title(f'{metric} over time', fontsize=14, pad=20)
+    plt.title(f'{metric}', fontsize=14, pad=20)
 
     # Grid
     plt.grid(True, alpha=0.3, linestyle='--')
@@ -209,7 +209,10 @@ def generate_plots(
     smooth: Optional[int] = None,
     ema_weight: Optional[float] = 0.99,
     ema_enabled: bool = True,
-    viewport_scale: float = 1000.0
+    viewport_scale: float = 1000.0,
+    group_by_prefix: bool = False,
+    all_metrics: bool = False,
+    include_system: bool = False
 ) -> List[str]:
     """
     Generate plots from metric data.
@@ -224,6 +227,9 @@ def generate_plots(
         ema_weight: EMA weight (0-1) when enabled
         ema_enabled: Whether to render EMA-smoothed line
         viewport_scale: Scale factor for time-weighted EMA normalization
+        group_by_prefix: If True, group metrics by prefix folder (e.g., rewards/* -> rewards/)
+        all_metrics: If True, plot all available metrics
+        include_system: If True, include system metrics (prefixed with "_") when plotting all metrics
 
     Returns:
         List of generated file paths
@@ -250,7 +256,7 @@ def generate_plots(
     for rid in run_ids:
         runs.append(get_run(entity_project, rid))
 
-    keys = list(dict.fromkeys(metrics + ["_step", "_timestamp"]))
+    keys = None if all_metrics else list(dict.fromkeys(metrics + ["_step", "_timestamp"]))
     run_data = []
     for run in runs:
         try:
@@ -282,9 +288,18 @@ def generate_plots(
         run_data.append((label, df, run))
 
     # Verify metrics exist
+    def is_system_metric(name: str) -> bool:
+        return name.startswith("_") or name.startswith("system/")
+
     all_available = set()
     for _, df, _ in run_data:
-        all_available.update([col for col in df.columns if not col.startswith('_')])
+        for col in df.columns:
+            if include_system or not is_system_metric(col):
+                all_available.add(col)
+
+    if all_metrics:
+        metrics = sorted(all_available)
+
     missing_metrics = [m for m in metrics if m not in all_available]
 
     if missing_metrics:
@@ -297,7 +312,9 @@ def generate_plots(
 
     # Determine output directory (only after validation)
     if output_dir:
-        output_path = Path(output_dir)
+        output_path = Path(output_dir).expanduser()
+        if not output_path.is_absolute():
+            output_path = Path.cwd() / output_path
         output_path.mkdir(parents=True, exist_ok=True)
     elif len(runs) == 1:
         output_path = resolve_output_dir(entity_project, runs[0], output_dir=output_dir)
@@ -316,7 +333,12 @@ def generate_plots(
     for metric in progress_wrap(metrics, "Generating plots"):
         # Create safe filename
         safe_metric_name = safe_filename(metric)
-        output_file = output_path / f"{safe_metric_name}.png"
+        metric_output_path = output_path
+        if group_by_prefix and "/" in metric:
+            prefix = safe_filename(metric.split("/", 1)[0])
+            metric_output_path = output_path / prefix
+            metric_output_path.mkdir(parents=True, exist_ok=True)
+        output_file = metric_output_path / f"{safe_metric_name}.png"
 
         try:
             plot_metric(
@@ -351,7 +373,10 @@ def generate_plots(
             "ema_weight": ema_weight if ema_enabled else None,
             "ema_enabled": ema_enabled,
             "viewport_scale": viewport_scale if ema_enabled else None,
+            "group_by_prefix": group_by_prefix,
             "metrics_plotted": metrics,
+            "all_metrics": all_metrics,
+            "include_system": include_system,
             "plots_generated": [str(Path(p).name) for p in generated_paths],
             "plot_count": len(generated_paths),
             "data_points": [len(df) for _, df, _ in run_data]
@@ -397,8 +422,12 @@ Examples:
     )
     parser.add_argument(
         "--metrics",
-        required=True,
         help="Comma-separated list of metrics to plot (e.g., 'loss,accuracy')"
+    )
+    parser.add_argument(
+        "--all-metrics",
+        action="store_true",
+        help="Plot all available metrics"
     )
     parser.add_argument(
         "--full-res",
@@ -427,6 +456,16 @@ Examples:
         help="Viewport scale for time-weighted EMA (default: 1000)"
     )
     parser.add_argument(
+        "--group-by-prefix",
+        action="store_true",
+        help="Group metric outputs into subfolders by prefix (e.g., rewards/* -> rewards/)"
+    )
+    parser.add_argument(
+        "--include-system",
+        action="store_true",
+        help="Include system metrics (prefixed with '_') when using --all-metrics"
+    )
+    parser.add_argument(
         "--no-ema",
         action="store_true",
         help="Disable EMA smoothing (shows only raw lines)"
@@ -435,10 +474,13 @@ Examples:
     args = parser.parse_args()
 
     # Parse metrics
-    metrics_list = [m.strip() for m in args.metrics.split(',') if m.strip()]
+    metrics_list = [m.strip() for m in args.metrics.split(',') if m.strip()] if args.metrics else []
 
-    if not metrics_list:
-        print("Error: No metrics specified", file=sys.stderr)
+    if args.all_metrics and metrics_list:
+        print("Error: --metrics and --all-metrics cannot be used together", file=sys.stderr)
+        return 1
+    if not args.all_metrics and not metrics_list:
+        print("Error: No metrics specified (use --metrics or --all-metrics)", file=sys.stderr)
         return 1
 
     try:
@@ -458,7 +500,10 @@ Examples:
             smooth=args.smooth,
             ema_weight=args.ema_weight,
             ema_enabled=not args.no_ema,
-            viewport_scale=args.viewport_scale
+            viewport_scale=args.viewport_scale,
+            group_by_prefix=args.group_by_prefix,
+            all_metrics=args.all_metrics,
+            include_system=args.include_system
         )
 
         if generated:

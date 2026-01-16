@@ -129,6 +129,65 @@ class TestGeneratePlots:
         assert metadata["run_ids"] == ["run-aaa", "run-bbb"]
 
     @patch("scripts.generate_plots.get_run")
+    def test_generate_with_group_by_prefix(self, mock_get_run, sample_history_df, tmp_path):
+        """Test grouping output by metric prefix."""
+        run = Mock()
+        run.id = "run-123"
+        run.name = "test-run"
+        run.entity = "test-entity"
+        run.project = "test-project"
+        run.history.return_value = sample_history_df
+        mock_get_run.return_value = run
+
+        output_dir = tmp_path / "out"
+
+        generated = generate_plots(
+            "test-entity/test-project",
+            "run-123",
+            ["train/loss"],
+            output_dir=str(output_dir),
+            group_by_prefix=True
+        )
+
+        assert len(generated) == 1
+        assert Path(generated[0]).exists()
+        assert (output_dir / "train" / "train_loss.png").exists()
+
+    @patch("scripts.generate_plots.get_run")
+    def test_generate_with_all_metrics(self, mock_get_run, sample_history_df, tmp_path):
+        """Test generating plots for all metrics."""
+        run = Mock()
+        run.id = "run-123"
+        run.name = "test-run"
+        run.entity = "test-entity"
+        run.project = "test-project"
+        run.history.return_value = sample_history_df
+        mock_get_run.return_value = run
+
+        output_dir = tmp_path / "out"
+
+        generated = generate_plots(
+            "test-entity/test-project",
+            "run-123",
+            [],
+            output_dir=str(output_dir),
+            all_metrics=True
+        )
+
+        expected_metrics = [
+            "epoch",
+            "learning_rate",
+            "train/accuracy",
+            "train/loss",
+            "val/accuracy",
+            "val/loss",
+        ]
+        assert len(generated) == len(expected_metrics)
+        for metric in expected_metrics:
+            filename = metric.replace("/", "_") + ".png"
+            assert (output_dir / filename).exists()
+
+    @patch("scripts.generate_plots.get_run")
     def test_missing_metrics_raises(self, mock_get_run, sample_history_df):
         """Test error when requested metrics are missing."""
         run = Mock()

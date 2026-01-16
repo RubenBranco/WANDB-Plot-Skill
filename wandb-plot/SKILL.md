@@ -73,12 +73,15 @@ description: |
 - `<entity/project>` (required)
 - `<run_id>` (required; comma-separated for multiple runs)
 - `--metrics "<m1,m2,...>"` (required; metric names as shown by `list_metrics.py`)
+- `--all-metrics` (optional; plot all metrics)
 - `--full-res` (optional; uses full `scan_history`)
 - `--smooth <n>` (optional; rolling average window)
 - `--output <dir>` (optional)
 - `--ema-weight <w>` (optional; default: 0.99)
 - `--viewport-scale <n>` (optional; default: 1000)
 - `--no-ema` (optional; disable EMA smoothing)
+- `--group-by-prefix` (optional; group outputs by metric prefix)
+- `--include-system` (optional; include system metrics like `_step` and `system/*` with `--all-metrics`)
 
 **Output**
 - Writes `<metric>.png` for each generated plot plus `metadata.json` to the output directory.
@@ -93,6 +96,8 @@ python3 scripts/list_metrics.py <entity/project> <run_id>
 python3 scripts/download_plots.py <entity/project> <run_id>
 python3 scripts/generate_plots.py <entity/project> <run_id> --metrics loss,accuracy
 python3 scripts/generate_plots.py <entity/project> run1,run2 --metrics loss --ema-weight 0.99 --viewport-scale 1000
+python3 scripts/generate_plots.py <entity/project> run1,run2 --metrics rewards/total_mean,rewards/total_std --output /path/to/folder --group-by-prefix
+python3 scripts/generate_plots.py <entity/project> run1,run2 --all-metrics --output /path/to/folder --group-by-prefix
 ```
 
 ## Outputs
