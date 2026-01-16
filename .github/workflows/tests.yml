@@ -1,0 +1,35 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Install dependencies
+        run: |
+          export PATH="$HOME/.cargo/bin:$PATH"
+          cd wandb-plot
+          uv pip install --system -e ".[dev]"
+
+      - name: Run unit tests
+        run: |
+          cd wandb-plot
+          pytest tests/ --cov=scripts -v
+
+      - name: Run integration tests
+        run: |
+          cd wandb-plot
+          pytest tests/ -m integration -v
+        env:
+          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}

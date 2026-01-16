@@ -1,0 +1,4 @@
+{
+  "loss": {"min": 0.1, "max": 2.5, "count": 1000, "type": "float"},
+  "accuracy": {"min": 0.4, "max": 0.95, "count": 1000, "type": "float"}
+}

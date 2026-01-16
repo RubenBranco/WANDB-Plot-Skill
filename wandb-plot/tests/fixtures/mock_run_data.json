@@ -1,0 +1,14 @@
+{
+  "runs": [
+    {
+      "id": "abc123",
+      "name": "test-run-1",
+      "state": "finished",
+      "createdAt": "2024-01-01T00:00:00",
+      "summary_metrics": {
+        "loss": 0.234,
+        "accuracy": 0.945
+      }
+    }
+  ]
+}

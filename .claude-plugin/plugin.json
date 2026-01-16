@@ -1,0 +1,7 @@
+{
+  "name": "wandb-plot",
+  "description": "Download and generate plots from Weights & Biases runs (skill + CLI scripts)",
+  "author": {
+    "name": "WANDB-Plot-Skill"
+  }
+}
