@@ -84,7 +84,7 @@ def list_runs(
                 if hasattr(run.created_at, "isoformat")
                 else (str(run.created_at) if run.created_at is not None else None)
             ),
-            "summary_metrics": dict(run.summary) if run.summary else {},
+            "summary_metrics": to_json_friendly(run.summary) if run.summary else {},
             "tags": run.tags if hasattr(run, 'tags') else [],
         }
 
@@ -93,6 +93,39 @@ def list_runs(
 
     logger.info("Found %d run(s) in %s/%s", len(runs_list), entity, project)
     return runs_list
+
+
+def to_json_friendly(value):
+    """Convert W&B summary values into JSON-serializable types."""
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    try:
+        items = value.items()
+    except Exception:
+        items = None
+    if items is not None:
+        return {str(k): to_json_friendly(v) for k, v in items}
+    if isinstance(value, (list, tuple, set)):
+        return [to_json_friendly(v) for v in value]
+    try:
+        isoformat = value.isoformat
+    except Exception:
+        isoformat = None
+    if callable(isoformat):
+        try:
+            return isoformat()
+        except Exception:
+            pass
+    try:
+        item = value.item
+    except Exception:
+        item = None
+    if callable(item):
+        try:
+            return item()
+        except Exception:
+            pass
+    return str(value)
 
 
 def format_run_table(runs: List[Dict]) -> str:

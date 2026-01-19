@@ -6,6 +6,7 @@ readme = "SKILL.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
+    {name = "Ruben Branco", email = "ruben.branco@outlook.pt"},
     {name = "Claude Code", email = "noreply@anthropic.com"}
 ]
 
