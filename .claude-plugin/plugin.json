@@ -6,10 +6,5 @@
     "name": "Ruben Branco",
     "email": "ruben.branco@outlook.pt"
   },
-  "skills": [                                                                                                                                                   
-      {                                                                                                                                                           
-        "name": "wandb-plot",                                                                                                                                     
-        "path": "skills/wandb-plot"                                                                                                                               
-      }                                                                                                                                                           
-    ] 
+  "skills": "./skills/" 
 }
