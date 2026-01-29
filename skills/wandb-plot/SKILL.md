@@ -11,13 +11,38 @@ description: |
 
 # W&B Plot Skill
 
+## MANDATORY Setup (Run First)
+
+**IMPORTANT:** Before running ANY script, you MUST execute this setup block to ensure the correct working directory and virtual environment.
+
+```bash
+# Determine skill directory (Claude Code plugin or Codex/local)
+if [ -n "${CLAUDE_PLUGIN_ROOT}" ]; then
+  SKILL_DIR="${CLAUDE_PLUGIN_ROOT}/skills/wandb-plot"
+elif [ -d "${HOME}/.codex/wandb-plot-skill/skills/wandb-plot" ]; then
+  SKILL_DIR="${HOME}/.codex/wandb-plot-skill/skills/wandb-plot"
+else
+  SKILL_DIR="$(pwd)"
+fi
+cd "$SKILL_DIR"
+
+# Create/activate venv and install deps (uv preferred, pip fallback)
+if [ ! -d ".venv" ]; then
+  if command -v uv &> /dev/null; then
+    uv venv .venv && . .venv/bin/activate && uv pip install -e .
+  else
+    python3 -m venv .venv && . .venv/bin/activate && pip install -e .
+  fi
+else
+  . .venv/bin/activate
+fi
+```
+
+After setup completes, all `python3 scripts/*.py` commands will work correctly from this directory.
+
 ## Prereqs
 
-- Auth: set `WANDB_API_KEY` (recommended) or run `wandb login`.
-- Working directory:
-  - Claude Code plugin: `cd "${CLAUDE_PLUGIN_ROOT}/skills/wandb-plot"`
-  - Codex: `cd ~/.codex/wandb-plot-skill/skills/wandb-plot` (or wherever cloned)
-  - Local repo: `cd skills/wandb-plot`
+- Auth: set `WANDB_API_KEY` environment variable (recommended) or run `wandb login`.
 
 ## Tools (Scripts)
 
