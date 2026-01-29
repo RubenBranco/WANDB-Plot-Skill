@@ -12,13 +12,13 @@ skill and CLI scripts for:
 - Downloading existing plot images
 - Generating line plots from raw metric data (including multi-run comparison and EMA smoothing)
 
-The implementation lives in `wandb-plot/`.
+The implementation lives in `skills/wandb-plot/`.
 
 ## Installation
 
 ### Claude Code (Plugin)
 
-This repo is a Claude Code plugin (manifest at `.claude-plugin/plugin.json`) and uses the shared skill file at `wandb-plot/SKILL.md`.
+This repo is a Claude Code plugin (manifest at `.claude-plugin/plugin.json`) and uses the skill file at `skills/wandb-plot/SKILL.md`.
 
 #### Option 1: Install from Marketplace (Recommended)
 
@@ -47,33 +47,25 @@ cc --plugin-dir /path/to/WANDB-Plot-Skill
 
 #### Runtime Dependencies
 
-After installing the plugin (either method), you'll need to install Python dependencies from `wandb-plot/` (see "Python Package" section below).
+After installing the plugin (either method), you'll need to install Python dependencies from `skills/wandb-plot/` (see "Python Package" section below).
 
-### Codex (Skill)
+### Codex
 
-Codex loads skills from `$CODEX_HOME/skills` (typically `~/.codex/skills`). To install this skill, copy the `wandb-plot/` directory into your Codex skills directory:
-
-```bash
-mkdir -p ~/.codex/skills
-cp -R wandb-plot ~/.codex/skills/wandb-plot
-```
-
-Restart Codex after installing to pick up the new skill.
-Install Python deps from `wandb-plot/` (see “Python Package” below).
+See [.codex/INSTALL.md](.codex/INSTALL.md) for detailed Codex installation instructions.
 
 ### Python Package (Optional)
 
 Using **uv** (recommended):
 
 ```bash
-cd wandb-plot
+cd skills/wandb-plot
 uv pip install -e .
 ```
 
 Using pip (fallback):
 
 ```bash
-cd wandb-plot
+cd skills/wandb-plot
 pip install -r requirements.txt
 ```
 
@@ -89,7 +81,7 @@ export WANDB_API_KEY=your_key_here
 
 ```bash
 # Run scripts from within the package directory
-cd wandb-plot
+cd skills/wandb-plot
 
 # 1. List projects for your default entity
 python3 scripts/list_projects.py --limit 10
@@ -133,7 +125,7 @@ wandb_plots/
 
 ```bash
 # Run tests from within the package directory
-cd wandb-plot
+cd skills/wandb-plot
 
 # Install dev dependencies
 uv pip install -e ".[dev]"
@@ -147,4 +139,4 @@ pytest tests/ -v -m integration
 
 ## Skills
 
-- Shared skill for Claude Code + Codex: `wandb-plot/SKILL.md`
+- Skill file: `skills/wandb-plot/SKILL.md`

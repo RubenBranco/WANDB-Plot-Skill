@@ -19,17 +19,17 @@ jobs:
       - name: Install dependencies
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
-          cd wandb-plot
+          cd skills/wandb-plot
           uv pip install --system -e ".[dev]"
 
       - name: Run unit tests
         run: |
-          cd wandb-plot
+          cd skills/wandb-plot
           pytest tests/ --cov=scripts -v
 
       - name: Run integration tests
         run: |
-          cd wandb-plot
+          cd skills/wandb-plot
           pytest tests/ -m integration -v
         env:
           WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
