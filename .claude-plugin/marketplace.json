@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "wandb-plot",
-      "source": ".",
+      "source": "RubenBranco/WANDB-Plot-Skill",
       "description": "Download and generate plots from Weights & Biases runs (skill + CLI scripts)",
       "version": "0.1.0",
       "author": {
