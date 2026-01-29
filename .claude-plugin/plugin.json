@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "description": "Download and generate plots from Weights & Biases runs (skill + CLI scripts)",
   "author": {
-    "name": "WANDB-Plot-Skill"
-  }
+    "name": "Ruben Branco",
+    "email": "ruben.branco@outlook.pt"
+  },
+  "skills": [                                                                                                                                                   
+      {                                                                                                                                                           
+        "name": "wandb-plot",                                                                                                                                     
+        "path": "skills/wandb-plot"                                                                                                                               
+      }                                                                                                                                                           
+    ] 
 }
