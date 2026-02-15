@@ -4,7 +4,7 @@
 
 ```bash
 mkdir -p ~/.codex
-git clone https://github.com/RubenBranco/WANDB-Plot-Skill.git ~/.codex/wandb-plot-skill
+git clone https://github.com/RubenBranco/WANDB-Plot-Skill.git ~/.codex/skills/wandb-plot-skill
 ```
 
 ## Step 2: Add to your AGENTS.md
